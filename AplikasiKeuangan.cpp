@@ -257,7 +257,7 @@ void ketDeposito() {
 	arsip = fopen("dataKeuanganMasuk.txt","r");
 	arsip2 = fopen("dataKeuanganKeluar.txt","r");
 	arsip3 = fopen("Deposito.txt","w+");
-	
+
 	cout << "\n1. Jumlah Deposito \n2. Tambah Deposito \nPilih (1/2) ";
 	cin >> pilihDepo;
 	if(pilihDepo==1) {
@@ -270,7 +270,7 @@ void ketDeposito() {
 			fwrite(&manajUang[0],sizeof(manajUang[0]),1,arsip3);
 		}
 	cout << endl << endl;
-	
+
 	fclose(arsip);
 	fclose(arsip2);
 	fclose(arsip3);
@@ -282,18 +282,18 @@ void laporanKeuangan(int menuLaporKeuangan) {
     cout<<"Failed"<<endl;
 	}
 	else if(menuLaporKeuangan==2){
-		cout<<"Pengurutan Biaya Pemasukkan Terbesar \n";
+		cout<<"Pengurutan Biaya Pemasukkan Terkecil \n";
         biayaBesar(0,jumlahMasuk-1);
         cout<<"\n\n";
-    cout<<"Pengurutan Biaya Terkecil \n";
+    cout<<"Pengurutan Biaya Pemasukkan Terbesar \n";
     biayaKecil(0,jumlahMasuk-1);
 
     cout<<"\n\n";
-    cout<<"Pengurutan Biaya Pengeluaran Terbesar \n";
+    cout<<"Pengurutan Biaya Pengeluaran Terkecil \n";
     biayaKeluarbe(0,jumlahKeluar-1);
 
     cout<<"\n\n";
-    cout<<"Pengurutan Biaya Pengeluaran Terkecil \n";
+    cout<<"Pengurutan Biaya Pengeluaran Terbesar \n";
     biayaKeluarke(0,jumlahKeluar-1);
     }
 	/*
