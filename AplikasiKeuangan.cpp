@@ -13,20 +13,24 @@ void laporanKeuangan(int menuLaporKeuangan);
 void pencarianKeuangan();
 void rencanaKeuangan();
 void cetakInput();
-void biayabesar();
-void waktutransaksi();
+void biayaBesar();
+void waktuTransaksi();
+void biayaKecil();
+void biayaKeluarbe();
+void biayaKeluarke();
+void ketDeposito();
+
 int i, j, k, jumlahMasuk, jumlahKeluar, pilihCari, pilihBiaya, pilihTanggal;
 char srcTanggal[9];
-void biayakecil();
-void biayakeluarbe();
-void biayakeluarke();
+
 typedef struct {
 	int pemasukan, pengeluaran;
+	long double deposito;
 	char keteranganma[100], keteranganke[100], waktuma[9], waktuke[9];
 } tipe1;
 tipe1 manajUang[100];
 
-FILE *arsip;
+FILE *arsip, *arsip2, *arsip3;
 
 int main() {
 	int menuUtama, menuManajKeuangan, balikKeluar, menuLaporKeuangan;
@@ -35,9 +39,8 @@ int main() {
 
 	do {
 	cout << "\t\t=== Aplikasi Keuangan ===" << endl;
-	cout << "\nMenu : \n1. Manajemen Keuangan \n2. Laporan Keuangan \n3. Pencarian \n4. Rencana Keuangan";
-	cout << "\n5. Cetak Hasil Input \n6. Deposito "<< endl;
-	cout<<"7. Keluar "<<endl;
+	cout << "\nMenu : \n1. Manajemen Keuangan \n2. Laporan Keuangan \n3. Pencarian \n4. Cetak Hasil Input";
+	cout << "\n5. Deposito \n6. Keluar"<< endl;
 	cout << "Pilih menu : "; cin >> menuUtama;
 
 	switch(menuUtama) {
@@ -71,21 +74,17 @@ int main() {
 			pencarianKeuangan();
 			break;
 		case 4:
-			rencanaKeuangan();
-			break;
-		case 5:
 			cetakInput();
 			cout << "\n1. Kembali \n2. Keluar \n(1/2) "; cin >> balikKeluar;
 			cin.ignore();
 			if(balikKeluar==2) exit(0);
 			else  kembali=true;
 			break;
-		case 6:
-            cout<<"\nMenghitung Deposito Berdasarkan Hasil Input "<<endl;
-            cout<<"Belum Saatnya"<<endl;
+		case 5:
+			ketDeposito();
 			break;
-        case 7:
-            cout << "\nTerima Kasih telah Menggunakan Program Ini" << endl;
+		case 6:
+			cout << "\nTerima Kasih telah Menggunakan Program Ini" << endl;
 			cout << "Keluar Program . . ." << endl;
 			exit(0);
 			break;
@@ -101,91 +100,89 @@ int main() {
 }
 
 
-void biayakeluarbe(int left, int right){
-int i=left;
-int j=right;
-tipe1 pivot,temp ;
-pivot = manajUang[(right+left)/2];
+void biayaKeluarbe(int left, int right){
+	int i=left;
+	int j=right;
+	tipe1 pivot,temp ;
+	pivot = manajUang[(right+left)/2];
 
-while(i<=j){
-    while(manajUang[i].pengeluaran<manajUang[(right+left)/2].pengeluaran)
-        i++;
-    while(manajUang[j].pengeluaran>manajUang[(right+left)/2].pengeluaran)
-        j--;
-if(i<=j){
-    temp=manajUang[i];
-    manajUang[i]=manajUang[j];
-    manajUang[j]=temp;
-    i++;
-    j--;}}
-if(left<j)
-    biayakeluarbe(left,j);
-if(i<right)
-   biayakeluarbe(i,right);
-        for(i=0;i<jumlahMasuk;i++){
-        cout << "\nNominal : Rp. "<<manajUang[i].pengeluaran;
-        cout << "\nWaktu (dd/mm/yy) : "<<manajUang[i].waktuke;
-        cout << "\nKeterangan : "<<manajUang[i].keteranganke;
-    }
+	while(i<=j){
+		 while(manajUang[i].pengeluaran<manajUang[(right+left)/2].pengeluaran)
+			  i++;
+		 while(manajUang[j].pengeluaran>manajUang[(right+left)/2].pengeluaran)
+			  j--;
+	if(i<=j){
+		 temp=manajUang[i];
+		 manajUang[i]=manajUang[j];
+		 manajUang[j]=temp;
+		 i++;
+		 j--;}}
+	if(left<j)
+		 biayaKeluarbe(left,j);
+	if(i<right)
+		biayaKeluarbe(i,right);
+	for(i=0;i<jumlahMasuk;i++){
+		cout << "\nNominal : Rp. "<<manajUang[i].pengeluaran;
+		cout << "\nWaktu (dd/mm/yy) : "<<manajUang[i].waktuke;
+		cout << "\nKeterangan : "<<manajUang[i].keteranganke;
+	}
 }
 
-void biayakeluarke(int left, int right){
-int i=left;
-int j=right;
-tipe1 pivot,temp ;
-pivot = manajUang[(right+left)/2];
+void biayaKeluarke(int left, int right){
+	int i=left;
+	int j=right;
+	tipe1 pivot,temp ;
+	pivot = manajUang[(right+left)/2];
 
-while(i<=j){
-    while(manajUang[i].pengeluaran>manajUang[(right+left)/2].pengeluaran)
-        i++;
-    while(manajUang[j].pengeluaran<manajUang[(right+left)/2].pengeluaran)
-        j--;
-if(i<=j){
-    temp=manajUang[i];
-    manajUang[i]=manajUang[j];
-    manajUang[j]=temp;
-    i++;
-    j--;}}
-if(left<j)
-    biayakeluarke(left,j);
-if(i<right)
-   biayakeluarke(i,right);
-        for(i=0;i<jumlahMasuk;i++){
-        cout << "\nNominal : Rp. "<<manajUang[i].pengeluaran;
-        cout << "\nWaktu (dd/mm/yy) : "<<manajUang[i].waktuke;
-        cout << "\nKeterangan : "<<manajUang[i].keteranganke;
-    }
-
+	while(i<=j){
+		 while(manajUang[i].pengeluaran>manajUang[(right+left)/2].pengeluaran)
+			  i++;
+		 while(manajUang[j].pengeluaran<manajUang[(right+left)/2].pengeluaran)
+			  j--;
+	if(i<=j){
+		temp=manajUang[i];
+		manajUang[i]=manajUang[j];
+		manajUang[j]=temp;
+		i++;
+		j--;}}
+	if(left<j)
+		biayaKeluarke(left,j);
+	if(i<right)
+		biayaKeluarke(i,right);
+	for(i=0;i<jumlahMasuk;i++){
+		cout << "\nNominal : Rp. "<<manajUang[i].pengeluaran;
+		cout << "\nWaktu (dd/mm/yy) : "<<manajUang[i].waktuke;
+		cout << "\nKeterangan : "<<manajUang[i].keteranganke;
+	}
 }
 
-void biayabesar(int left, int right){
-int i=left;
-int j=right;
-tipe1 pivot,temp ;
-pivot = manajUang[(right+left)/2];
+void biayaBesar(int left, int right){
+	int i=left;
+	int j=right;
+	tipe1 pivot,temp ;
+	pivot = manajUang[(right+left)/2];
 
-while(i<=j){
-    while(manajUang[i].pemasukan<manajUang[(right+left)/2].pemasukan)
-        i++;
-    while(manajUang[j].pemasukan>manajUang[(right+left)/2].pemasukan)
-        j--;
-if(i<=j){
-    temp=manajUang[i];
-    manajUang[i]=manajUang[j];
-    manajUang[j]=temp;
-    i++;
-    j--;}}
-if(left<j)
-    biayabesar(left,j);
-if(i<right)
-   biayabesar(i,right);
-        for(i=0;i<jumlahMasuk;i++){
-        cout << "\nNominal : Rp. "<<manajUang[i].pemasukan;
-        cout << "\nWaktu (dd/mm/yy) : "<<manajUang[i].waktuma;
-        cout << "\nKeterangan : "<<manajUang[i].keteranganma;
-    }
-    }
-
+	while(i<=j){
+		 while(manajUang[i].pemasukan<manajUang[(right+left)/2].pemasukan)
+			  i++;
+		 while(manajUang[j].pemasukan>manajUang[(right+left)/2].pemasukan)
+			  j--;
+	if(i<=j){
+		 temp=manajUang[i];
+		 manajUang[i]=manajUang[j];
+		 manajUang[j]=temp;
+		 i++;
+		 j--;}}
+	if(left<j)
+		 biayaBesar(left,j);
+	if(i<right)
+		biayaBesar(i,right);
+	for(i=0;i<jumlahMasuk;i++){
+		cout << "\nNominal : Rp. "<<manajUang[i].pemasukan;
+		cout << "\nWaktu (dd/mm/yy) : "<<manajUang[i].waktuma;
+		cout << "\nKeterangan : "<<manajUang[i].keteranganma;
+	}
+}
 
 void manajemenKeuangan(int menuManajKeuangan) {
 	string ketPendapatan;
@@ -208,15 +205,15 @@ void manajemenKeuangan(int menuManajKeuangan) {
 			cout << "\t === Pengeluaran ===" << endl;
 			cout<<"Masukkan Jumlah Data = ";
 			cin>>jumlahKeluar;
-			arsip = fopen("dataKeuanganKeluar.txt","a");
+			arsip2 = fopen("dataKeuanganKeluar.txt","a");
 			for(i=0;i<jumlahKeluar;i++){
             cout<<"Data ke-"<<i+1<<endl;
 				cout << "Nominal : Rp. "; cin >> manajUang[i].pengeluaran;
 				cout << "Waktu (dd/mm/yy) : "; cin.ignore(); cin.getline(manajUang[i].waktuke,9);
 				cout << "Keterangan : "; cin.getline(manajUang[i].keteranganke,100);
-				fwrite(&manajUang[i],sizeof(manajUang[i]),1,arsip);
+				fwrite(&manajUang[i],sizeof(manajUang[i]),1,arsip2);
 			}
-			fclose(arsip);
+			fclose(arsip2);
 		} else
 		if(menuManajKeuangan==3) {
 				menuManajKeuangan=3;
@@ -227,7 +224,7 @@ void manajemenKeuangan(int menuManajKeuangan) {
 					cout<<"Kembali ke Sebelumnya"<<endl;}
 			}
 
-void biayakecil(int left, int right){
+void biayaKecil(int left, int right){
 int i=left;
 int j=right;
 tipe1 pivot,temp ;
@@ -245,15 +242,39 @@ if(i<=j){
     i++;
     j--;}}
 if(left<j)
-    biayakecil(left,j);
+    biayaKecil(left,j);
 if(i<right)
-   biayakecil(i,right);
+   biayaKecil(i,right);
         for(i=0;i<jumlahMasuk;i++){
         cout << "\nNominal : Rp. "<<manajUang[i].pemasukan;
         cout << "\nWaktu (dd/mm/yy) : "<<manajUang[i].waktuma;
         cout << "\nKeterangan : "<<manajUang[i].keteranganma;
     }
-    }
+}
+
+void ketDeposito() {
+	int pilihDepo;
+	arsip = fopen("dataKeuanganMasuk.txt","r");
+	arsip2 = fopen("dataKeuanganKeluar.txt","r");
+	arsip3 = fopen("Deposito.txt","w+");
+	
+	cout << "\n1. Jumlah Deposito \n2. Tambah Deposito \nPilih (1/2) ";
+	cin >> pilihDepo;
+	if(pilihDepo==1) {
+		for(i=0; i<1; i++) {
+			fread(&manajUang[i],sizeof(manajUang[i]),1,arsip3);
+		}
+		cout << "Uang sekarang : Rp." << manajUang[0].deposito;
+	} else if(pilihDepo==2) {
+			cout << "Jumlah nominal : Rp."; cin >> manajUang[0].deposito;
+			fwrite(&manajUang[0],sizeof(manajUang[0]),1,arsip3);
+		}
+	cout << endl << endl;
+	
+	fclose(arsip);
+	fclose(arsip2);
+	fclose(arsip3);
+}
 
 void laporanKeuangan(int menuLaporKeuangan) {
 	if(menuLaporKeuangan==1){
@@ -262,18 +283,18 @@ void laporanKeuangan(int menuLaporKeuangan) {
 	}
 	else if(menuLaporKeuangan==2){
 		cout<<"Pengurutan Biaya Pemasukkan Terbesar \n";
-        biayabesar(0,jumlahMasuk-1);
+        biayaBesar(0,jumlahMasuk-1);
         cout<<"\n\n";
     cout<<"Pengurutan Biaya Terkecil \n";
-    biayakecil(0,jumlahMasuk-1);
+    biayaKecil(0,jumlahMasuk-1);
 
     cout<<"\n\n";
     cout<<"Pengurutan Biaya Pengeluaran Terbesar \n";
-    biayakeluarbe(0,jumlahKeluar-1);
+    biayaKeluarbe(0,jumlahKeluar-1);
 
     cout<<"\n\n";
     cout<<"Pengurutan Biaya Pengeluaran Terkecil \n";
-    biayakeluarke(0,jumlahKeluar-1);
+    biayaKeluarke(0,jumlahKeluar-1);
     }
 	/*
 		else if(menuLaporKeuangan==2)
@@ -303,12 +324,6 @@ void pencarianKeuangan() {
 	}
 	cout << "----------------------------------------" << endl << endl;
 	fclose(arsip);
-
-}
-
-void rencanaKeuangan() {
-	cout << "\t\t === Rencana Keuangan ===" << endl;
-	cout << "Fitur belum ada" << endl;
 }
 
 void cetakInput(){
