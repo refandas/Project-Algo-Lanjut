@@ -6,6 +6,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 using namespace std;
 
 void manajemenKeuangan(int menuManajKeuangan);
@@ -19,9 +20,7 @@ void biayaKecil();
 void biayaKeluarbe();
 void biayaKeluarke();
 void ketDeposito();
-
-int i, j, k, jumlahMasuk, jumlahKeluar, pilihCari, pilihBiaya, pilihTanggal;
-char srcTanggal[9];
+void waktuBesar();
 
 typedef struct {
 	int pemasukan, pengeluaran;
@@ -34,6 +33,10 @@ typedef struct {
 } depo;
 depo deposito;
 
+int a, b, c, d, i, j, k, jumlahMasuk, jumlahKeluar, pilihCari, pilihBiaya, pilihTanggal;
+string waktuMasuk[100], waktuKeluar[100];
+char srcTanggal[9];
+tipe1 temp;
 FILE *arsip, *arsip2, *arsip3;
 
 int main() {
@@ -146,7 +149,7 @@ void biayaKeluarbe(int left, int right){
 		 biayaKeluarbe(left,j);
 	if(i<right)
 		biayaKeluarbe(i,right);
-	for(i=0;i<jumlahMasuk;i++){
+	for(i=0;i<jumlahKeluar;i++){
 		cout << "\nNominal : Rp. "<<manajUang[i].pengeluaran;
 		cout << "\nWaktu (dd/mm/yy) : "<<manajUang[i].waktuke;
 		cout << "\nKeterangan : "<<manajUang[i].keteranganke;
@@ -174,7 +177,7 @@ void biayaKeluarke(int left, int right){
 		biayaKeluarke(left,j);
 	if(i<right)
 		biayaKeluarke(i,right);
-	for(i=0;i<jumlahMasuk;i++){
+	for(i=0;i<jumlahKeluar;i++){
 		cout << "\nNominal : Rp. "<<manajUang[i].pengeluaran;
 		cout << "\nWaktu (dd/mm/yy) : "<<manajUang[i].waktuke;
 		cout << "\nKeterangan : "<<manajUang[i].keteranganke;
@@ -306,10 +309,61 @@ void ketDeposito() {
 	fclose(arsip3);
 }
 
+void waktuBesar() {
+	arsip = fopen("dataKeuanganMasuk.txt","r");
+	arsip2 = fopen("dataKeuanganKeluar.txt","r");
+	
+	i=0;
+	while(feof(arsip)==NULL) {
+		fread(&manajUang[i],sizeof(manajUang[i]),1,arsip);
+		i++;
+	}
+
+	for(a=0; a<i-1; a++) {
+		if(manajUang[a].waktuma<manajUang[a+1].waktuma) {
+			temp = manajUang[a];
+			manajUang[a] = manajUang[a+1];
+			manajUang[a+1] = temp;
+		}
+	}
+	
+	for(a=0; a<i-1; a++) {
+		cout << "== Pendapatan" << endl;
+		cout << "Nominal : Rp. " << manajUang[a].pemasukan << endl;
+		cout << "Waktu (dd/mm/yy) : " << manajUang[a].waktuma << endl;
+		cout << "Keterangan : " << manajUang[a].keteranganma << endl;
+	}
+	fclose(arsip);
+	
+	j=0;
+	while(feof(arsip2)==NULL) {
+		fread(&manajUang[j],sizeof(manajUang[j]),1,arsip2);
+		j++;
+	}
+	
+	for(a=0; a<j-1; a++) {
+		if(manajUang[a].waktuke<manajUang[a+1].waktuke) {
+			temp = manajUang[a];
+			manajUang[a] = manajUang[a+1];
+			manajUang[a+1] = temp;
+		}
+	}
+	
+	for(a=0; a<j-1; a++) {
+		cout << "\n== Pengeluaran" << endl;
+		cout << "Nominal : Rp. " << manajUang[a].pengeluaran << endl;
+		cout << "Waktu (dd/mm/yy) : " << manajUang[a].waktuke << endl;
+		cout << "Keterangan : " << manajUang[a].keteranganke << endl;
+	}
+	fclose(arsip2);
+	
+}
+
 void laporanKeuangan(int menuLaporKeuangan) {
 	if(menuLaporKeuangan==1){
 		cout<<"Urutan Berdasarkan Waktu Transaksi \n";
-    cout<<"Failed"<<endl;
+    cout << endl;
+    waktuBesar();
 	}
 	else if(menuLaporKeuangan==2){
 		cout<<"Pengurutan Biaya Pemasukkan Terkecil \n";
