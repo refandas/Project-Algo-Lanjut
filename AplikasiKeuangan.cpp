@@ -1,3 +1,5 @@
+
+
 //============================================================================
 // Name        : AplikasiKeuangan.cpp
 // Author      : refanda, nico
@@ -20,7 +22,6 @@ void biayaKecil();
 void biayaKeluarbe();
 void biayaKeluarke();
 void ketDeposito();
-void waktuBesar();
 
 typedef struct {
 	int pemasukan, pengeluaran;
@@ -73,10 +74,10 @@ int main() {
 			do {
 				cout << "\t\t === Laporan Keuangan ===" << endl;
 				cout << "\n Urutkan berdasarkan : " << endl;
-				cout << "1. Waktu transaksi \n2. Biaya terbesar \n3. Kembali" << endl;
+				cout << "1. Waktu Transaksi \n2. Biaya terbesar \n3. Kembali" << endl;
 				cout << "Pilih (1..3) : "; cin >> menuLaporKeuangan;
 				laporanKeuangan(menuLaporKeuangan);
-				
+
 				if(menuLaporKeuangan<3) {
 					cout << "\n1. Kembali \n2. Keluar \nPilih (1/2) "; cin >> balikKeluar;
 					cin.ignore();
@@ -89,7 +90,7 @@ int main() {
 			break;
 		case 3:
 			pencarianKeuangan();
-			
+
 			cout << "\n1. Kembali \n2. Keluar \nPilih (1/2) "; cin >> balikKeluar;
 			cin.ignore();
 			if(balikKeluar==2) exit(0);
@@ -98,7 +99,7 @@ int main() {
 		case 4:
 			cetakInput();
 			cout << "\n1. Kembali \n2. Keluar \nPilih (1/2) "; cin >> balikKeluar;
-			
+
 			cin.ignore();
 			if(balikKeluar==2) exit(0);
 			else  kembali=true;
@@ -106,7 +107,7 @@ int main() {
 		case 5:
 			ketDeposito();
 			cout << "\n1. Kembali \n2. Keluar \nPilih (1/2) "; cin >> balikKeluar;
-			
+
 			cin.ignore();
 			if(balikKeluar==2) exit(0);
 			else  kembali=true;
@@ -287,7 +288,7 @@ void ketDeposito() {
 	arsip = fopen("dataKeuanganMasuk.txt","r");
 	arsip2 = fopen("dataKeuanganKeluar.txt","r");
 	arsip3 = fopen("Deposito.txt","w+");
-	
+
 	i=0;
 	while(fread(&manajUang[i],sizeof(manajUang[i]),1,arsip)) {
 		totalPemasukan += manajUang[i].pemasukan;
@@ -298,72 +299,23 @@ void ketDeposito() {
 		totalPengeluaran += manajUang[i].pengeluaran;
 		i++;
 	}
-		
+
 	fread(&deposito,sizeof(deposito),1,arsip3);
 	deposito.jumlahDeposito += (totalPemasukan-totalPengeluaran);
 	cout << "Uang sekarang : Rp." << deposito.jumlahDeposito;
 	cout << endl;
-	
+
 	fclose(arsip);
 	fclose(arsip2);
 	fclose(arsip3);
 }
 
-void waktuBesar() {
-	arsip = fopen("dataKeuanganMasuk.txt","r");
-	arsip2 = fopen("dataKeuanganKeluar.txt","r");
-	
-	i=0;
-	while(feof(arsip)==NULL) {
-		fread(&manajUang[i],sizeof(manajUang[i]),1,arsip);
-		i++;
-	}
-
-	for(a=0; a<i-1; a++) {
-		if(manajUang[a].waktuma<manajUang[a+1].waktuma) {
-			temp = manajUang[a];
-			manajUang[a] = manajUang[a+1];
-			manajUang[a+1] = temp;
-		}
-	}
-	
-	for(a=0; a<i-1; a++) {
-		cout << "== Pendapatan" << endl;
-		cout << "Nominal : Rp. " << manajUang[a].pemasukan << endl;
-		cout << "Waktu (dd/mm/yy) : " << manajUang[a].waktuma << endl;
-		cout << "Keterangan : " << manajUang[a].keteranganma << endl;
-	}
-	fclose(arsip);
-	
-	j=0;
-	while(feof(arsip2)==NULL) {
-		fread(&manajUang[j],sizeof(manajUang[j]),1,arsip2);
-		j++;
-	}
-	
-	for(a=0; a<j-1; a++) {
-		if(manajUang[a].waktuke<manajUang[a+1].waktuke) {
-			temp = manajUang[a];
-			manajUang[a] = manajUang[a+1];
-			manajUang[a+1] = temp;
-		}
-	}
-	
-	for(a=0; a<j-1; a++) {
-		cout << "\n== Pengeluaran" << endl;
-		cout << "Nominal : Rp. " << manajUang[a].pengeluaran << endl;
-		cout << "Waktu (dd/mm/yy) : " << manajUang[a].waktuke << endl;
-		cout << "Keterangan : " << manajUang[a].keteranganke << endl;
-	}
-	fclose(arsip2);
-	
-}
 
 void laporanKeuangan(int menuLaporKeuangan) {
 	if(menuLaporKeuangan==1){
 		cout<<"Urutan Berdasarkan Waktu Transaksi \n";
     cout << endl;
-    waktuBesar();
+    cout<<"Gagal BOSS !!"<<endl;
 	}
 	else if(menuLaporKeuangan==2){
 		cout<<"Pengurutan Biaya Pemasukkan Terkecil \n";
@@ -388,9 +340,9 @@ void pencarianKeuangan() {
 	cout << endl;
 	arsip = fopen("dataKeuanganMasuk.txt","r");
 	arsip2 = fopen("dataKeuanganKeluar.txt","r");
-	
+
 	string tanggal = srcTanggal;
-	
+
 	i=0;
 	while(fread(&manajUang[i],sizeof(manajUang[i]),1,arsip)) {
 		if(manajUang[i].waktuma==tanggal) {
@@ -420,7 +372,7 @@ void pencarianKeuangan() {
 
 void cetakInput(){
 	arsip = fopen("dataKeuanganMasuk.txt","r");
-	
+
 	cout<<"\n\t === Pemasukkan ==="<<endl;
 	i=0;
 	while(fread(&manajUang[i],sizeof(manajUang[i]),1,arsip)) {
@@ -434,7 +386,7 @@ void cetakInput(){
 //////////////////////////////////////////////////////////////////////////
 
 	arsip2 = fopen("dataKeuanganKeluar.txt","r");
-	
+
 	cout << "----------------------------------------" << endl;
 	cout << "\n\t === Pengeluaran ===" << endl;
 	j=0;
