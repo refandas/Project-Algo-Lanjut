@@ -1,5 +1,3 @@
-
-
 //============================================================================
 // Name        : AplikasiKeuangan.cpp
 // Author      : refanda, nico
@@ -22,6 +20,8 @@ void biayaKecil();
 void biayaKeluarbe();
 void biayaKeluarke();
 void ketDeposito();
+void waktuBesar();
+void waktuKecil();
 
 typedef struct {
 	int pemasukan, pengeluaran;
@@ -74,7 +74,7 @@ int main() {
 			do {
 				cout << "\t\t === Laporan Keuangan ===" << endl;
 				cout << "\n Urutkan berdasarkan : " << endl;
-				cout << "1. Waktu Transaksi \n2. Biaya terbesar \n3. Kembali" << endl;
+				cout << "1. Waktu transaksi \n2. Biaya terbesar \n3. Kembali" << endl;
 				cout << "Pilih (1..3) : "; cin >> menuLaporKeuangan;
 				laporanKeuangan(menuLaporKeuangan);
 
@@ -310,12 +310,68 @@ void ketDeposito() {
 	fclose(arsip3);
 }
 
+void waktuBesar() {
+	arsip = fopen("dataKeuanganMasuk.txt","r");
+
+	i=0;
+	while(feof(arsip)==NULL) {
+		fread(&manajUang[i],sizeof(manajUang[i]),1,arsip);
+		i++;
+	}
+    for(i=0;i<jumlahMasuk-1;i++){
+	for(a=0; a<jumlahMasuk-1-i; a++) {
+		if(manajUang[a].waktuma<manajUang[a+1].waktuma) {
+			temp = manajUang[a];
+			manajUang[a] = manajUang[a+1];
+			manajUang[a+1] = temp;
+		}
+	}
+
+	}
+
+	cout << "== Pendapatan" << endl;
+	for(a=0; a<jumlahMasuk; a++) {
+		cout << "Nominal : Rp. " << manajUang[a].pemasukan << endl;
+		cout << "Waktu (dd/mm/yy) : " << manajUang[a].waktuma << endl;
+		cout << "Keterangan : " << manajUang[a].keteranganma << endl;
+	}
+	fclose(arsip);
+}
+
+void waktuKecil(){
+    arsip2 = fopen("dataKeuanganKeluar.txt","r");
+
+	j=0;
+	while(feof(arsip2)==NULL) {
+		fread(&manajUang[j],sizeof(manajUang[j]),1,arsip2);
+		j++;
+	}
+    for(i=0;i<jumlahKeluar-1;i++){
+	for(a=0; a<jumlahKeluar-i-1; a++) {
+		if(manajUang[a].waktuke<manajUang[a+1].waktuke) {
+			temp = manajUang[a];
+			manajUang[a] = manajUang[a+1];
+			manajUang[a+1] = temp;
+		}
+	}
+
+	}
+
+	for(a=0; a<jumlahKeluar; a++) {
+		cout << "\n== Pengeluaran" << endl;
+		cout << "Nominal : Rp. " << manajUang[a].pengeluaran << endl;
+		cout << "Waktu (dd/mm/yy) : " << manajUang[a].waktuke << endl;
+		cout << "Keterangan : " << manajUang[a].keteranganke << endl;
+	}
+	fclose(arsip2);
+}
 
 void laporanKeuangan(int menuLaporKeuangan) {
 	if(menuLaporKeuangan==1){
 		cout<<"Urutan Berdasarkan Waktu Transaksi \n";
     cout << endl;
-    cout<<"Gagal BOSS !!"<<endl;
+    waktuBesar();
+    waktuKecil();
 	}
 	else if(menuLaporKeuangan==2){
 		cout<<"Pengurutan Biaya Pemasukkan Terkecil \n";
